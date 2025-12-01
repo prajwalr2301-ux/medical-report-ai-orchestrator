@@ -1,0 +1,23 @@
+# Core ADK and Gemini
+google-adk
+google-genai
+
+# PDF Processing
+PyMuPDF
+pdfplumber
+Pillow
+
+# Utilities
+python-dotenv
+jsonschema
+
+# Web Interface
+streamlit
+pandas
+requests
+
+# Vertex AI (for future deployment)
+google-cloud-aiplatform
+
+# Development
+pytest

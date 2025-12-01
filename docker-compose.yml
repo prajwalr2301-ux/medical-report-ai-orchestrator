@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  medical-report-ai:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: medical-report-ai:latest
+    container_name: medical-report-ai-orchestrator
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GOOGLE_CLOUD_LOCATION=${GOOGLE_CLOUD_LOCATION:-global}
+      - GOOGLE_GENAI_USE_VERTEXAI=${GOOGLE_GENAI_USE_VERTEXAI:-0}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      # Mount lab_reports directory for persistent storage (optional)
+      - ./lab_reports:/app/lab_reports
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8501/_stcore/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - medical-ai-network
+
+networks:
+  medical-ai-network:
+    driver: bridge
